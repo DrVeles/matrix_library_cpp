@@ -6,8 +6,8 @@ OPEN_CMD =
 
 OS = $(shell uname)
 ifeq ($(OS), Darwin)
-	CC_TEST_FLAGS = -lgtest
-	LEAKS+=CK_FORK=no leaks -atExit -q -- 
+	CC_TEST_FLAGS = -lgtest --coverage  # Add --coverage flag for code coverage
+	LEAKS = CK_FORK=no leaks -atExit -q -- 
 	OPEN_CMD = xdg-open 
 else ifeq ($(OS), Linux)
 	CC_TEST_FLAGS = -lgtest -lrt -lpthread -lm -lsubunit
@@ -18,19 +18,25 @@ endif
 all: rt
 
 test: s21_matrix_oop.a google_format
-	@$(CC) $(CC_FLAGS) ./s21_matrix_oop_tests.cpp s21_matrix_oop.a -o s21_matrix_oop 
-	./s21_matrix_oop 
+	@$(CC) $(CC_FLAGS) ./s21_matrix_oop_tests.cpp s21_matrix_oop.cpp -o s21_matrix_oop_test $(CC_TEST_FLAGS)
+	./s21_matrix_oop_test
+
+gcov_report: test
+	lcov -t "Tests" -o tests.info -c -d .
+	lcov -e tests.info '*.cpp' -o tests.info
+	genhtml -o report tests.info
+	open ./report/index.html
 
 s21_matrix_oop.a: clean
 	@$(CC) $(CC_FLAGS) -c ./s21_matrix_oop.cpp -o s21_matrix_oop.a
 
 clean: 
-	-@rm -rf s21_matrix_oop *.a *.o
+	-@rm -rf s21_matrix_oop s21_matrix_oop_test *.a *.o *.gcda *.gcno *.info report/
 
 rt: clean test
 
 leaks: test
-	$(LEAKS)./s21_matrix_oop 
+	$(LEAKS) ./s21_matrix_oop_test 
 
 google_format:
 	-@clang-format -style=Google -i *.h *.cpp
