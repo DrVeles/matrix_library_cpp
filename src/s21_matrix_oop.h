@@ -5,7 +5,9 @@
 
 class S21Matrix {
  private:
-  int rows_, cols_;  // rows and columns attributes
+  //====================== ATRIBUTES ==========================
+
+  int rows_, cols_;
   double** matrix_;
 
  public:
@@ -24,7 +26,7 @@ class S21Matrix {
   // destructor
   ~S21Matrix();
 
-  //================ accessors and mutators ===================
+  //================ ACCESSORS and MUTATORS ===================
 
   // getting rows from S21Matrix
   int getRows() const;
@@ -38,7 +40,7 @@ class S21Matrix {
   // setting cols for S21Matrix
   void setCols(int cols);
 
-  //==================== public methods =======================
+  //==================== public METHODS =======================
 
   /**
    * @brief Check is equal matrix
@@ -92,14 +94,72 @@ class S21Matrix {
    */
   S21Matrix InverseMatrix();
 
-  // =================== operators overloads ====================
+  // =================== OPERATORS overloads ====================
+
+
+
+  /**
+   * @brief `+`	Addition of two matrices.	
+   * @exception Different matrix dimensions.
+   */ 
+  S21Matrix operator+(const S21Matrix& other);
+
+  /**
+   * @brief `-` Subtraction of one matrix from another.
+   * @exception Different matrix dimensions.
+   */ 
+  S21Matrix operator-(const S21Matrix& other);
+
+  /**
+   * @brief `*`	Matrix multiplication and matrix multiplication by a number.	
+   * @exception The number of columns of the first matrix does not equal the number of rows of the second matrix.
+   */ 
+  S21Matrix operator*(const S21Matrix& other);
+
+  /**
+   * @brief `==` Checks for matrices equality (EqMatrix).
+   */ 
+  S21Matrix operator==(const S21Matrix& other);
+
+  /**
+   * @brief `=` S21Matrix& operator=(const S21Matrix& other);
+   */ 
+  S21Matrix& operator=(const S21Matrix& other);
+
+  /**
+   * @brief `+=`	Addition assignment (SumMatrix)
+   * @exception 	Different matrix dimensions.
+   */ 
+  S21Matrix& operator+=(const S21Matrix& other);     
+
+  /**
+   * @brief `-=`	Addition assignment (SubMatrix)
+   * @exception 	Different matrix dimensions.
+   */ 
+  S21Matrix& operator-=(const S21Matrix& other);     
+
+  /**
+   * @brief `*=`	Multiplication assignment (MulMatrix/MulNumber).
+   * @exception 	The number of columns of the first matrix does not equal the number of rows of the second matrix.
+   */ 
+  S21Matrix& operator*=(const S21Matrix& other);   
+
+  /**
+   * @brief Indexation by matrix elements (row, column).
+   * @param `i` row, `j` col
+   * @return a link to an element with the index `[i][j]`
+   * @exception Index is outside the matrix.
+   */ 
+  double& operator()(int i, int j); 
+
+  
 
   /**
    * @brief
    * @param
    * @return
    * @exception
-   */
+   */ 
 };
 
 #endif
