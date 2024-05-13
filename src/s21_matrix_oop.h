@@ -152,7 +152,7 @@ class S21Matrix {
    */ 
   double& operator()(int i, int j); 
 
-  
+  //====================== My methods ===========================
 
   /**
    * @brief
@@ -160,6 +160,8 @@ class S21Matrix {
    * @return
    * @exception
    */ 
+  void printS21Matrix(const S21Matrix& other);
+
 };
 
 #endif
