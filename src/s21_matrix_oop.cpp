@@ -7,7 +7,7 @@
   }
 	S21Matrix::S21Matrix(int rows_cols) {
 		if (rows_cols < 1) {
-			throw std::excetion
+			throw std::length_error("Rows and cols must be greater than 0")
 		}
 		rows_ = cols_ = rows_cols;
 		matrix_ = new double*[rows_ * cols_]{};
