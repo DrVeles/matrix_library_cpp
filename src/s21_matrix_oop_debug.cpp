@@ -1,28 +1,17 @@
 #include "s21_matrix_oop.h"
 
 int main() {
-  S21Matrix a(3, 3);
-  a(1, 1) = 1;
-  S21Matrix b(std::move(a));
+  S21Matrix matrix(2, 2);
+  matrix(0, 0) = 1.0;
+  matrix(0, 1) = 2.0;
+  matrix(1, 0) = 3.0;
+  matrix(1, 1) = 4.0;
+  matrix.printS21Matrix();
 
-  a.printS21Matrix();
+  matrix.setRows(4);
+
   std::cout << std::endl;
-  b.printS21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
-  (&a)->~S21Matrix();
+  matrix.printS21Matrix();
+
   return 0;
 }

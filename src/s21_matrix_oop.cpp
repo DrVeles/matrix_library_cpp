@@ -52,11 +52,37 @@ S21Matrix::~S21Matrix() { this->deleteMatrix(); }
 int S21Matrix::getRows() const { return rows_; }
 
 int S21Matrix::getCols() const { return cols_; }
+
 // setting rows for S21Matrix
-void S21Matrix::setRows(int rows) { rows_ = rows; }
+void S21Matrix::setRows(int rows) {
+  S21Matrix temp_matrix(rows, this->cols_);
+  int smallest_rows = (rows < this->rows_) ? rows : this->rows_;
+
+  for (int i = 0; i < smallest_rows; i++) {
+    for (int j = 0; j < this->cols_; j++) {
+      temp_matrix.matrix_[i][j] = this->matrix_[i][j];
+    }
+  }
+  this->deleteMatrix();
+  this->createMatrix(rows, temp_matrix.cols_);
+  *this = temp_matrix;
+}
 
 // setting cols for S21Matrix
-void S21Matrix::setCols(int cols) { cols_ = cols; }
+void S21Matrix::setCols(int cols) {
+  S21Matrix temp_matrix(this->rows_, cols);
+  int smallest_cols = (cols < this->cols_) ? cols : this->cols_;
+
+  for (int i = 0; i < this->rows_; i++) {
+    for (int j = 0; j < smallest_cols; j++) {
+      temp_matrix.matrix_[i][j] = this->matrix_[i][j];
+    }
+  }
+
+  this->deleteMatrix();
+  this->createMatrix(temp_matrix.rows_, cols);
+  *this = temp_matrix;
+}
 
 double& S21Matrix::operator()(int i, int j) {
   if (i < 0 or j < 0 or i >= rows_ or j >= cols_) {
@@ -69,11 +95,25 @@ void S21Matrix::printS21Matrix() const {
   if (matrix_ == nullptr) {
     std::cout << "NULL-matrix" << std::endl;
   } else {
-    for (int i = 0; i < cols_; i++) {
-      for (int j = 0; j < rows_; j++) {
+    for (int i = 0; i < rows_; i++) {
+      for (int j = 0; j < cols_; j++) {
         std::cout << matrix_[i][j] << ' ';
       }
       std::cout << std::endl;
     }
   }
+}
+
+// =================== OPERATORS overloads ====================
+S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
+  this->deleteMatrix();
+  this->createMatrix(other.rows_, other.cols_);
+
+  for (int i = 0; i < other.rows_; i++) {
+    for (int j = 0; j < other.cols_; j++) {
+      this->matrix_[i][j] = other.matrix_[i][j];
+    }
+  }
+
+  return *this;
 }
