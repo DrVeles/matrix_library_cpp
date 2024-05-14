@@ -128,6 +128,7 @@ TEST(test_accessors_mutators, SameRows) {
   EXPECT_EQ(matrix(1, 0), 3.0);
   EXPECT_EQ(matrix(1, 1), 4.0);
 }
+
 TEST(test_accessors_mutators, SameCols) {
   S21Matrix matrix(2, 2);
   matrix(0, 0) = 1.0;
@@ -168,6 +169,7 @@ TEST(test_accessors_mutators, OneRow) {
   EXPECT_EQ(matrix(0, 0), 1.0);
   EXPECT_EQ(matrix(0, 1), 2.0);
 }
+
 TEST(test_accessors_mutators, OneCol) {
   S21Matrix matrix(2, 2);
   matrix(0, 0) = 1.0;
@@ -184,16 +186,110 @@ TEST(test_accessors_mutators, OneCol) {
 }
 
 TEST(test_accessors_mutators, test_2) { S21Matrix a; }
-TEST(test_accessors_mutators, test_3) { S21Matrix a; }
-TEST(test_accessors_mutators, test_4) { S21Matrix a; }
+
+//==================== public METHODS =======================
+
+TEST(test_methods, equal_matrix) {
+  S21Matrix a;
+  S21Matrix b;
+
+  EXPECT_TRUE(a.EqMatrix(b));
+}
+
+TEST(test_methods, equal_matrix_false) {
+  S21Matrix a;
+  S21Matrix b;
+  b.setCols(2);
+
+  EXPECT_FALSE(a.EqMatrix(b));
+}
+
+TEST(test_methods, equal_matrix_false_2) {
+  S21Matrix a;
+  S21Matrix b;
+  a(0, 0) = 1;
+
+  EXPECT_FALSE(a.EqMatrix(b));
+}
+
+TEST(test_methods, sub_matrix_1) {
+  S21Matrix a;
+  S21Matrix b;
+  a(0, 0) = 1;
+  b(0, 0) = 1;
+  a.SumMatrix(b);
+  ASSERT_EQ((a)(0, 0), 2.0);
+}
+
+TEST(test_methods, sub_matrix_2) {
+  S21Matrix a;
+  S21Matrix b;
+  a(0, 0) = 1;
+  b(0, 0) = 1;
+  a.setCols(2);
+  a(0, 1) = 1;
+  b.setCols(2);
+  a.SumMatrix(b);
+
+  ASSERT_EQ(a(0, 0), 2.0);
+  ASSERT_EQ(a(0, 1), 1.0);
+}
+
+TEST(test_methods, sub_matrix_3) {
+  S21Matrix a;
+  S21Matrix b(2);
+  a(0, 0) = 1;
+  b(0, 0) = 1;
+
+  ASSERT_ANY_THROW(a.SumMatrix(b););
+}
 
 // =================== OPERATORS overloads ====================
+
+TEST(MatrixAccessTest, ValidIndices) {
+  S21Matrix matrix(3, 3);  // Создаем матрицу 3x3
+
+  // Заполняем матрицу значениями
+  matrix(0, 0) = 1.0;
+  matrix(0, 1) = 2.0;
+  matrix(0, 2) = 3.0;
+  matrix(1, 0) = 4.0;
+  matrix(1, 1) = 5.0;
+  matrix(1, 2) = 6.0;
+  matrix(2, 0) = 7.0;
+  matrix(2, 1) = 8.0;
+  matrix(2, 2) = 9.0;
+
+  // Проверяем корректность доступа к элементам
+  EXPECT_EQ(matrix(0, 0), 1.0);
+  EXPECT_EQ(matrix(0, 1), 2.0);
+  EXPECT_EQ(matrix(0, 2), 3.0);
+  EXPECT_EQ(matrix(1, 0), 4.0);
+  EXPECT_EQ(matrix(1, 1), 5.0);
+  EXPECT_EQ(matrix(1, 2), 6.0);
+  EXPECT_EQ(matrix(2, 0), 7.0);
+  EXPECT_EQ(matrix(2, 1), 8.0);
+  EXPECT_EQ(matrix(2, 2), 9.0);
+}
+
+TEST(MatrixAccessTest, InvalidIndices) {
+  S21Matrix matrix(3, 3);  // Создаем матрицу 3x3
+
+  // Проверяем выброс исключений при некорректном доступе
+  EXPECT_THROW(matrix(-1, 0), std::out_of_range);
+  EXPECT_THROW(matrix(0, -1), std::out_of_range);
+  EXPECT_THROW(matrix(3, 0), std::out_of_range);
+  EXPECT_THROW(matrix(0, 3), std::out_of_range);
+  EXPECT_THROW(matrix(3, 3), std::out_of_range);
+}
 
 TEST(test_operators, test_1_copy) {
   S21Matrix a(3);
   a(1, 1) = 1;
+  const double& c = a(1, 1);
   S21Matrix b = a;
   ASSERT_EQ(a(1, 1), b(1, 1));
+  ASSERT_EQ(a(1, 1), c);
 }
 
 TEST(test_operators, test_2_copy) {
@@ -203,14 +299,58 @@ TEST(test_operators, test_2_copy) {
   b = a;
   ASSERT_EQ(a(1, 1), b(1, 1));
 }
+
 TEST(test_operators, test_3_bad_access) {
   S21Matrix a(3);
   ASSERT_ANY_THROW(a(1, 4) = 5);
 }
+
 TEST(test_operators, test_4_bad_access) {
   S21Matrix a;
-  a.printS21Matrix();
   ASSERT_ANY_THROW(a(1, 0) = 5);
+}
+
+TEST(test_operators, equal_matrix) {
+  S21Matrix a;
+  S21Matrix b;
+
+  EXPECT_TRUE(a == b);
+}
+
+TEST(test_operators, sub_matrix_1) {
+  S21Matrix a;
+  S21Matrix b;
+  a(0, 0) = 1;
+  b(0, 0) = 1;
+
+  ASSERT_EQ((a += b)(0, 0), 2.0);
+}
+
+TEST(test_operators, sub_matrix_2) {
+  S21Matrix a;
+  S21Matrix b;
+  a(0, 0) = 1;
+  b(0, 0) = 1;
+  a.setCols(2);
+  a(0, 1) = 1;
+  b.setCols(2);
+
+  ASSERT_EQ((a += b)(0, 0), 2.0);
+  ASSERT_EQ((a += b)(0, 1), 1.0);
+}
+
+TEST(test_operators, sub_matrix_3) {
+  S21Matrix a;
+  S21Matrix b;
+  a(0, 0) = 1;
+  b(0, 0) = 1;
+  S21Matrix c;
+
+  c = a + b;
+
+  ASSERT_EQ(c(0, 0), 2.0);
+  ASSERT_EQ(a(0, 0), 1.0);
+  ASSERT_EQ(b(0, 0), 1.0);
 }
 
 int main(int argc, char* argv[]) {

@@ -27,9 +27,9 @@ debug: clean google_format s21_matrix_oop.a
 
 
 gcov_report: test
-	lcov -t "Tests" -o tests.info -c -d . --ignore-errors inconsistent,usage
-	lcov -e tests.info '*.cpp' -o tests.info
-	genhtml -o report tests.info
+	@lcov -t "Tests" -o tests.info -c -d . --ignore-errors inconsistent >/dev/null 2>&1
+	@lcov -e tests.info '*.cpp' -o tests.info >/dev/null 2>&1
+	@genhtml -o report tests.info >/dev/null 2>&1
 	open ./report/index.html
 
 s21_matrix_oop.a: clean

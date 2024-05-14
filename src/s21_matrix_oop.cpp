@@ -104,7 +104,78 @@ void S21Matrix::printS21Matrix() const {
   }
 }
 
+//==================== public METHODS =======================
+
+bool S21Matrix::EqMatrix(const S21Matrix& other) noexcept {
+  if (this->rows_ == other.rows_ and this->cols_ == other.cols_) {
+    for (int i = 0; i < other.rows_; i++) {
+      for (int j = 0; j < other.cols_; j++) {
+        if (this->matrix_[i][j] != other.matrix_[i][j]) {
+          return false;
+        }
+      }
+    }
+  } else {
+    return false;
+  }
+  return true;
+}
+
+
+void S21Matrix::SumMatrix(const S21Matrix& other) {
+  if (this->rows_ != other.rows_ or this->cols_ != other.cols_) {
+    throw std::invalid_argument("Different matrix dimensions");
+  }
+
+  for (int i = 0; i < other.rows_; i++) {
+    for (int j = 0; j < other.cols_; j++) {
+      this->matrix_[i][j] += other.matrix_[i][j];
+    }
+  }
+}
+
+/**
+ * @brief Subtracts another matrix from the current one
+ * @exception different matrix dimensions.
+ */
+void SubMatrix(const S21Matrix& other);
+
+// Multiplies the current matrix by a number.
+void MulNumber(const double num);
+
+/**
+ * @brief Multiplies the current matrix by the second matrix.
+ * @exception The number of columns of the first matrix is not equal to the
+ * number of rows of the second matrix.
+ */
+void MulMatrix(const S21Matrix& other);
+
+/**
+ * @brief Creates a new transposed matrix from the current one and returns it.
+ */
+S21Matrix Transpose();
+
+/**
+ * @brief Calculates the algebraic addition matrix of the current one and
+ * returns it.
+ * @exception The matrix is not square.
+ */
+S21Matrix CalcComplements();
+
+/**
+ * @brief Calculates and returns the determinant of the current matrix.
+ * @exception The matrix is not square.
+ */
+double Determinant();
+
+/**
+ * @brief Calculates and returns the inverse matrix.
+ * @exception Matrix determinant is 0.
+ */
+S21Matrix InverseMatrix();
+
 // =================== OPERATORS overloads ====================
+
 S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
   this->deleteMatrix();
   this->createMatrix(other.rows_, other.cols_);
@@ -117,3 +188,47 @@ S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
 
   return *this;
 }
+
+S21Matrix S21Matrix::operator+(const S21Matrix& other) {
+  S21Matrix temp(other);
+  temp.SumMatrix(*this);
+  return temp;
+}
+
+/**
+ * @brief `-` Subtraction of one matrix from another.
+ * @exception Different matrix dimensions.
+ */
+// S21Matrix S21Matrix::operator-(const S21Matrix& other) {}
+
+/**
+ * @brief `*`	Matrix multiplication and matrix multiplication by a number.
+ * @exception The number of columns of the first matrix does not equal the
+ * number of rows of the second matrix.
+ */
+// S21Matrix S21Matrix::operator*(const S21Matrix& other) {}
+
+/**
+ * @brief `==` Checks for matrices equality (EqMatrix).
+ */
+bool S21Matrix::operator==(const S21Matrix& other) {
+  return this->EqMatrix(other);
+}
+
+S21Matrix& S21Matrix::operator+=(const S21Matrix& other) {
+  SumMatrix(other);
+  return *this;
+}
+
+/**
+ * @brief `-=`	Addition assignment (SubMatrix)
+ * @exception 	Different matrix dimensions.
+ */
+// S21Matrix& S21Matrix::operator-=(const S21Matrix& other) {}
+
+/**
+ * @brief `*=`	Multiplication assignment (MulMatrix/MulNumber).
+ * @exception 	The number of columns of the first matrix does not equal
+ * the number of rows of the second matrix.
+ */
+// S21Matrix& S21Matrix::operator*=(const S21Matrix& other) {}

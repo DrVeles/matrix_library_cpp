@@ -10,8 +10,6 @@ class S21Matrix {
   int rows_, cols_;
   double** matrix_;
 
-  void checkOutOfRange(int row, int col);
-
   void createMatrix(int rows, int cols);
   void deleteMatrix() noexcept;
 
@@ -51,7 +49,7 @@ class S21Matrix {
    * @brief Check is equal matrix
    * @return `true` if equal, else `false`
    */
-  bool EqMatrix(const S21Matrix& other);
+  bool EqMatrix(const S21Matrix& other) noexcept;
 
   /**
    * @brief Adds the second matrix to the current one
@@ -123,7 +121,7 @@ class S21Matrix {
   /**
    * @brief `==` Checks for matrices equality (EqMatrix).
    */
-  S21Matrix operator==(const S21Matrix& other);
+  bool operator==(const S21Matrix& other);
 
   /**
    * @brief `=` S21Matrix& operator=(const S21Matrix& other);
@@ -156,7 +154,6 @@ class S21Matrix {
    * @exception Index is outside the matrix.
    */
   double& operator()(int i, int j);
-  const double& operator()(int i, int j) const;
 
   //====================== My methods ===========================
 
