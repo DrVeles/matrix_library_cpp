@@ -10,6 +10,11 @@ class S21Matrix {
   int rows_, cols_;
   double** matrix_;
 
+  void checkOutOfRange(int row, int col);
+
+  void createMatrix(int rows, int cols);
+  void deleteMatrix() noexcept;
+
  public:
   //========================= BAZE ============================
 
@@ -22,7 +27,7 @@ class S21Matrix {
   // copy constructor
   S21Matrix(const S21Matrix& other);
   // move constructor
-  S21Matrix(S21Matrix&& other);
+  S21Matrix(S21Matrix&& other) noexcept;
   // destructor
   ~S21Matrix();
 
@@ -151,6 +156,7 @@ class S21Matrix {
    * @exception Index is outside the matrix.
    */
   double& operator()(int i, int j);
+  const double& operator()(int i, int j) const;
 
   //====================== My methods ===========================
 
@@ -160,7 +166,7 @@ class S21Matrix {
    * @return
    * @exception
    */
-  void printS21Matrix(const S21Matrix& other);
+  void printS21Matrix() const;
 };
 
 #endif
