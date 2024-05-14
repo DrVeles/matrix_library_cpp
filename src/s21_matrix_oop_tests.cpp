@@ -212,7 +212,7 @@ TEST(test_methods, equal_matrix_false_2) {
   EXPECT_FALSE(a.EqMatrix(b));
 }
 
-TEST(test_methods, sub_matrix_1) {
+TEST(test_methods, sum_matrix_1) {
   S21Matrix a;
   S21Matrix b;
   a(0, 0) = 1;
@@ -221,7 +221,7 @@ TEST(test_methods, sub_matrix_1) {
   ASSERT_EQ((a)(0, 0), 2.0);
 }
 
-TEST(test_methods, sub_matrix_2) {
+TEST(test_methods, sum_matrix_2) {
   S21Matrix a;
   S21Matrix b;
   a(0, 0) = 1;
@@ -235,13 +235,45 @@ TEST(test_methods, sub_matrix_2) {
   ASSERT_EQ(a(0, 1), 1.0);
 }
 
-TEST(test_methods, sub_matrix_3) {
+TEST(test_methods, sum_matrix_3) {
   S21Matrix a;
   S21Matrix b(2);
   a(0, 0) = 1;
   b(0, 0) = 1;
 
   ASSERT_ANY_THROW(a.SumMatrix(b););
+}
+
+TEST(test_methods, sub_matrix_1) {
+  S21Matrix a;
+  S21Matrix b;
+  a(0, 0) = 1;
+  b(0, 0) = 2;
+  a.SubMatrix(b);
+  ASSERT_EQ((a)(0, 0), -1.0);
+}
+
+TEST(test_methods, sub_matrix_2) {
+  S21Matrix a;
+  S21Matrix b;
+  a(0, 0) = 1;
+  b(0, 0) = 1;
+  a.setCols(2);
+  b.setCols(2);
+  b(0, 1) = 1;
+  a.SubMatrix(b);
+
+  ASSERT_EQ(a(0, 0), 0.0);
+  ASSERT_EQ(a(0, 1), -1.0);
+}
+
+TEST(test_methods, sub_matrix_3) {
+  S21Matrix a;
+  S21Matrix b(2);
+  a(0, 0) = 1;
+  b(0, 0) = 1;
+
+  ASSERT_ANY_THROW(a.SubMatrix(b););
 }
 
 // =================== OPERATORS overloads ====================
@@ -317,7 +349,7 @@ TEST(test_operators, equal_matrix) {
   EXPECT_TRUE(a == b);
 }
 
-TEST(test_operators, sub_matrix_1) {
+TEST(test_operators, sum_matrix_1) {
   S21Matrix a;
   S21Matrix b;
   a(0, 0) = 1;
@@ -326,7 +358,7 @@ TEST(test_operators, sub_matrix_1) {
   ASSERT_EQ((a += b)(0, 0), 2.0);
 }
 
-TEST(test_operators, sub_matrix_2) {
+TEST(test_operators, sum_matrix_2) {
   S21Matrix a;
   S21Matrix b;
   a(0, 0) = 1;
@@ -339,7 +371,7 @@ TEST(test_operators, sub_matrix_2) {
   ASSERT_EQ((a += b)(0, 1), 1.0);
 }
 
-TEST(test_operators, sub_matrix_3) {
+TEST(test_operators, sum_matrix_3) {
   S21Matrix a;
   S21Matrix b;
   a(0, 0) = 1;
@@ -351,6 +383,42 @@ TEST(test_operators, sub_matrix_3) {
   ASSERT_EQ(c(0, 0), 2.0);
   ASSERT_EQ(a(0, 0), 1.0);
   ASSERT_EQ(b(0, 0), 1.0);
+}
+
+TEST(test_operators, sub_matrix_1) {
+  S21Matrix a;
+  S21Matrix b;
+  a(0, 0) = 3;
+  b(0, 0) = 1;
+
+  ASSERT_EQ((a -= b)(0, 0), 2.0);
+}
+
+TEST(test_operators, sub_matrix_2) {
+  S21Matrix a;
+  S21Matrix b;
+  a(0, 0) = 1;
+  b(0, 0) = 3;
+  a.setCols(2);
+  b.setCols(2);
+  b(0, 1) = 1;
+
+  ASSERT_EQ((a -= b)(0, 0), -2.0);
+  ASSERT_EQ(a(0, 1), -1.0);
+}
+
+TEST(test_operators, sub_matrix_3) {
+  S21Matrix a;
+  S21Matrix b;
+  a(0, 0) = 1;
+  b(0, 0) = 11;
+  S21Matrix c;
+
+  c = a - b;
+
+  ASSERT_EQ(c(0, 0), -10.0);
+  ASSERT_EQ(a(0, 0), 1.0);
+  ASSERT_EQ(b(0, 0), 11.0);
 }
 
 int main(int argc, char* argv[]) {

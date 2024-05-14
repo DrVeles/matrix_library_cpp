@@ -53,7 +53,6 @@ int S21Matrix::getRows() const { return rows_; }
 
 int S21Matrix::getCols() const { return cols_; }
 
-// setting rows for S21Matrix
 void S21Matrix::setRows(int rows) {
   S21Matrix temp_matrix(rows, this->cols_);
   int smallest_rows = (rows < this->rows_) ? rows : this->rows_;
@@ -68,7 +67,6 @@ void S21Matrix::setRows(int rows) {
   *this = temp_matrix;
 }
 
-// setting cols for S21Matrix
 void S21Matrix::setCols(int cols) {
   S21Matrix temp_matrix(this->rows_, cols);
   int smallest_cols = (cols < this->cols_) ? cols : this->cols_;
@@ -121,7 +119,6 @@ bool S21Matrix::EqMatrix(const S21Matrix& other) noexcept {
   return true;
 }
 
-
 void S21Matrix::SumMatrix(const S21Matrix& other) {
   if (this->rows_ != other.rows_ or this->cols_ != other.cols_) {
     throw std::invalid_argument("Different matrix dimensions");
@@ -134,11 +131,17 @@ void S21Matrix::SumMatrix(const S21Matrix& other) {
   }
 }
 
-/**
- * @brief Subtracts another matrix from the current one
- * @exception different matrix dimensions.
- */
-void SubMatrix(const S21Matrix& other);
+void S21Matrix::SubMatrix(const S21Matrix& other) {
+  if (this->rows_ != other.rows_ or this->cols_ != other.cols_) {
+    throw std::invalid_argument("Different matrix dimensions");
+  }
+
+  for (int i = 0; i < other.rows_; i++) {
+    for (int j = 0; j < other.cols_; j++) {
+      this->matrix_[i][j] -= other.matrix_[i][j];
+    }
+  }
+}
 
 // Multiplies the current matrix by a number.
 void MulNumber(const double num);
@@ -190,16 +193,16 @@ S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
 }
 
 S21Matrix S21Matrix::operator+(const S21Matrix& other) {
-  S21Matrix temp(other);
-  temp.SumMatrix(*this);
+  S21Matrix temp(*this);
+  temp.SumMatrix(other);
   return temp;
 }
 
-/**
- * @brief `-` Subtraction of one matrix from another.
- * @exception Different matrix dimensions.
- */
-// S21Matrix S21Matrix::operator-(const S21Matrix& other) {}
+S21Matrix S21Matrix::operator-(const S21Matrix& other) {
+  S21Matrix temp(*this);
+  temp.SubMatrix(other);
+  return temp;
+}
 
 /**
  * @brief `*`	Matrix multiplication and matrix multiplication by a number.
@@ -208,9 +211,6 @@ S21Matrix S21Matrix::operator+(const S21Matrix& other) {
  */
 // S21Matrix S21Matrix::operator*(const S21Matrix& other) {}
 
-/**
- * @brief `==` Checks for matrices equality (EqMatrix).
- */
 bool S21Matrix::operator==(const S21Matrix& other) {
   return this->EqMatrix(other);
 }
@@ -220,11 +220,10 @@ S21Matrix& S21Matrix::operator+=(const S21Matrix& other) {
   return *this;
 }
 
-/**
- * @brief `-=`	Addition assignment (SubMatrix)
- * @exception 	Different matrix dimensions.
- */
-// S21Matrix& S21Matrix::operator-=(const S21Matrix& other) {}
+S21Matrix& S21Matrix::operator-=(const S21Matrix& other) {
+  SubMatrix(other);
+  return *this;
+}
 
 /**
  * @brief `*=`	Multiplication assignment (MulMatrix/MulNumber).
