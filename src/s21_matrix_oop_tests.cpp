@@ -276,6 +276,48 @@ TEST(test_methods, sub_matrix_3) {
   ASSERT_ANY_THROW(a.SubMatrix(b););
 }
 
+TEST(test_methods, mult_matrix_num) {
+  S21Matrix a(2);
+  a(0, 0) = 1;
+  a(1, 1) = 2;
+  double num = 1.1;
+  a.MulNumber(num);
+
+  ASSERT_EQ(a(0, 0), 1.1);
+  ASSERT_EQ(a(1, 1), 2.2);
+}
+
+TEST(test_methods, mult_matrix_matrix) {
+  S21Matrix a(2);
+  a.setRows(1);
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+
+  S21Matrix b(2);
+  b.setCols(1);
+  b(0, 0) = 3;
+  b(1, 0) = 4;
+
+  a.MulMatrix(b);
+
+  ASSERT_EQ(a(0, 0), 11);
+  ASSERT_EQ(a.getCols(), 1);
+  ASSERT_EQ(a.getRows(), 1);
+}
+
+TEST(test_methods, mult_matrix_matrix_exc) {
+  S21Matrix a(2);
+  a.setRows(1);
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+
+  S21Matrix b(3);
+  b(0, 0) = 3;
+  b(1, 0) = 4;
+
+  ASSERT_ANY_THROW(a.MulMatrix(b));
+}
+
 // =================== OPERATORS overloads ====================
 
 TEST(MatrixAccessTest, ValidIndices) {
@@ -419,6 +461,94 @@ TEST(test_operators, sub_matrix_3) {
   ASSERT_EQ(c(0, 0), -10.0);
   ASSERT_EQ(a(0, 0), 1.0);
   ASSERT_EQ(b(0, 0), 11.0);
+}
+
+TEST(test_operators, mult_matrix_num_1) {
+  S21Matrix a(2);
+  double num = 2;
+
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+  a(1, 0) = 3;
+  a(1, 1) = 4;
+
+  a *= num;
+
+  ASSERT_EQ(a(0, 0), 2);
+  ASSERT_EQ(a(0, 1), 4);
+  ASSERT_EQ(a(1, 0), 6);
+  ASSERT_EQ(a(1, 1), 8);
+  ASSERT_EQ(a.getCols(), 2);
+  ASSERT_EQ(a.getRows(), 2);
+}
+
+TEST(test_operators, mult_matrix_num_2) {
+  S21Matrix a(2);
+  double num = 2;
+  S21Matrix r;
+
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+  a(1, 0) = 3;
+  a(1, 1) = 4;
+
+  r = a * num;
+
+  ASSERT_EQ(r(0, 0), 2);
+  ASSERT_EQ(r(0, 1), 4);
+  ASSERT_EQ(r(1, 0), 6);
+  ASSERT_EQ(r(1, 1), 8);
+  ASSERT_EQ(r.getCols(), 2);
+  ASSERT_EQ(r.getRows(), 2);
+}
+
+TEST(test_operators, mult_matrix_matrix) {
+  S21Matrix a(2);
+  S21Matrix b(2);
+
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+  a(1, 0) = 3;
+  a(1, 1) = 4;
+
+  b(0, 0) = 1;
+  b(0, 1) = 2;
+  b(1, 0) = 3;
+  b(1, 1) = 4;
+
+  a *= b;
+
+  ASSERT_EQ(a(0, 0), 7);
+  ASSERT_EQ(a(0, 1), 10);
+  ASSERT_EQ(a(1, 0), 15);
+  ASSERT_EQ(a(1, 1), 22);
+  ASSERT_EQ(a.getCols(), 2);
+  ASSERT_EQ(a.getRows(), 2);
+}
+
+TEST(test_operators, mult_matrix_matrix_2) {
+  S21Matrix a(2);
+  S21Matrix b(2);
+  S21Matrix c;
+
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+  a(1, 0) = 3;
+  a(1, 1) = 4;
+
+  b(0, 0) = 1;
+  b(0, 1) = 2;
+  b(1, 0) = 3;
+  b(1, 1) = 4;
+
+  c = a * b;
+
+  EXPECT_EQ(c(0, 0), 7);
+  EXPECT_EQ(c(0, 1), 10);
+  EXPECT_EQ(c(1, 0), 15);
+  EXPECT_EQ(c(1, 1), 22);
+  EXPECT_EQ(c.getCols(), 2);
+  EXPECT_EQ(c.getRows(), 2);
 }
 
 int main(int argc, char* argv[]) {

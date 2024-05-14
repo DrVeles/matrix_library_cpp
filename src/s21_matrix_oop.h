@@ -64,7 +64,7 @@ class S21Matrix {
   void SubMatrix(const S21Matrix& other);
 
   // Multiplies the current matrix by a number.
-  void MulNumber(const double num);
+  void MulNumber(const double num) noexcept;
 
   /**
    * @brief Multiplies the current matrix by the second matrix.
@@ -112,11 +112,16 @@ class S21Matrix {
   S21Matrix operator-(const S21Matrix& other);
 
   /**
-   * @brief `*`	Matrix multiplication and matrix multiplication by a number.
+   * @brief `*`	Matrix multiplication.
    * @exception The number of columns of the first matrix does not equal the
    * number of rows of the second matrix.
    */
   S21Matrix operator*(const S21Matrix& other);
+
+  /**
+   * @brief `*`	Matrix multiplication by a number.
+   */
+  S21Matrix operator*(const double& num);
 
   /**
    * @brief `==` Checks for matrices equality (EqMatrix).
@@ -141,11 +146,16 @@ class S21Matrix {
   S21Matrix& operator-=(const S21Matrix& other);
 
   /**
-   * @brief `*=`	Multiplication assignment (MulMatrix/MulNumber).
+   * @brief `*=`	Multiplication assignment MulMatrix.
    * @exception 	The number of columns of the first matrix does not equal
    * the number of rows of the second matrix.
    */
   S21Matrix& operator*=(const S21Matrix& other);
+
+  /**
+   * @brief `*=`	Multiplication assignment MulNumber.
+   */
+  S21Matrix& operator*=(const double& num);
 
   /**
    * @brief Indexation by matrix elements (row, column).

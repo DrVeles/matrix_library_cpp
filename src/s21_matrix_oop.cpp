@@ -144,14 +144,40 @@ void S21Matrix::SubMatrix(const S21Matrix& other) {
 }
 
 // Multiplies the current matrix by a number.
-void MulNumber(const double num);
+void S21Matrix::MulNumber(const double num) noexcept {
+  for (int i = 0; i < this->rows_; i++) {
+    for (int j = 0; j < this->cols_; j++) {
+      this->matrix_[i][j] *= num;
+    }
+  }
+}
 
 /**
  * @brief Multiplies the current matrix by the second matrix.
  * @exception The number of columns of the first matrix is not equal to the
  * number of rows of the second matrix.
  */
-void MulMatrix(const S21Matrix& other);
+void S21Matrix::MulMatrix(const S21Matrix& other) {
+  if (this->cols_ != other.rows_) {
+    throw std::invalid_argument(
+        "The number of columns of the first matrix is not equal to the number "
+        "of rows of the second matrix.");
+  }
+
+  S21Matrix result(this->rows_, other.cols_);
+
+  for (int i = 0; i < this->rows_; i++) {
+    for (int j = 0; j < other.cols_; j++) {
+      for (int k = 0; k < this->cols_; k++) {
+        result.matrix_[i][j] += this->matrix_[i][k] * other.matrix_[k][j];
+      }
+    }
+  }
+
+  this->deleteMatrix();
+  this->createMatrix(result.rows_, result.cols_);
+  *this = result;
+}
 
 /**
  * @brief Creates a new transposed matrix from the current one and returns it.
@@ -204,12 +230,17 @@ S21Matrix S21Matrix::operator-(const S21Matrix& other) {
   return temp;
 }
 
-/**
- * @brief `*`	Matrix multiplication and matrix multiplication by a number.
- * @exception The number of columns of the first matrix does not equal the
- * number of rows of the second matrix.
- */
-// S21Matrix S21Matrix::operator*(const S21Matrix& other) {}
+S21Matrix S21Matrix::operator*(const S21Matrix& other) {
+  S21Matrix temp(*this);
+  temp.MulMatrix(other);
+  return temp;
+}
+
+S21Matrix S21Matrix::operator*(const double& num) {
+  S21Matrix temp(*this);
+  temp.MulNumber(num);
+  return temp;
+}
 
 bool S21Matrix::operator==(const S21Matrix& other) {
   return this->EqMatrix(other);
@@ -225,9 +256,11 @@ S21Matrix& S21Matrix::operator-=(const S21Matrix& other) {
   return *this;
 }
 
-/**
- * @brief `*=`	Multiplication assignment (MulMatrix/MulNumber).
- * @exception 	The number of columns of the first matrix does not equal
- * the number of rows of the second matrix.
- */
-// S21Matrix& S21Matrix::operator*=(const S21Matrix& other) {}
+S21Matrix& S21Matrix::operator*=(const S21Matrix& other) {
+  MulMatrix(other);
+  return *this;
+}
+S21Matrix& S21Matrix::operator*=(const double& num) {
+  MulNumber(num);
+  return *this;
+}
