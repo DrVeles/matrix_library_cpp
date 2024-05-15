@@ -81,6 +81,11 @@ class S21Matrix {
   S21Matrix Transpose();
 
   /**
+   * @brief Calculation minor to matrix.
+   */
+  S21Matrix Minor(int row, int col) const;
+
+  /**
    * @brief Calculates the algebraic addition matrix of the current one and
    * returns it.
    * @exception The matrix is not square.
@@ -166,16 +171,6 @@ class S21Matrix {
    * @exception Index is outside the matrix.
    */
   double& operator()(int i, int j);
-
-  //====================== My methods ===========================
-
-  /**
-   * @brief
-   * @param
-   * @return
-   * @exception
-   */
-  void printS21Matrix() const;
 };
 
 #endif

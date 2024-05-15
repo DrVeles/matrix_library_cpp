@@ -6,11 +6,11 @@ void S21Matrix::createMatrix(int rows, int cols) {
   if (rows < 1 or cols < 1) {
     throw std::length_error("Rows and cols must be greater than 0");
   }
-  rows_ = rows;
-  cols_ = cols;
-  matrix_ = new double*[rows_];
-  for (int i = 0; i < rows_; ++i) {
-    matrix_[i] = new double[cols_]{};
+  this->rows_ = rows;
+  this->cols_ = cols;
+  this->matrix_ = new double*[this->rows_];
+  for (int i = 0; i < this->rows_; ++i) {
+    matrix_[i] = new double[this->cols_]{};
   }
 }
 
@@ -30,9 +30,9 @@ S21Matrix::S21Matrix(int r_c) { createMatrix(r_c, r_c); }
 S21Matrix::S21Matrix(int rows, int cols) { createMatrix(rows, cols); }
 
 S21Matrix::S21Matrix(const S21Matrix& other) {
-  this->createMatrix(other.cols_, other.rows_);
-  for (int i = 0; i < cols_; i++) {
-    for (int j = 0; j < rows_; j++) {
+  this->createMatrix(other.rows_, other.cols_);
+  for (int i = 0; i < other.rows_; i++) {
+    for (int j = 0; j < other.cols_; j++) {
       this->matrix_[i][j] = other.matrix_[i][j];
     }
   }
@@ -87,19 +87,6 @@ double& S21Matrix::operator()(int i, int j) {
     throw std::out_of_range("Matrix indices are out of range");
   }
   return matrix_[i][j];
-}
-
-void S21Matrix::printS21Matrix() const {
-  if (matrix_ == nullptr) {
-    std::cout << "NULL-matrix" << std::endl;
-  } else {
-    for (int i = 0; i < rows_; i++) {
-      for (int j = 0; j < cols_; j++) {
-        std::cout << matrix_[i][j] << ' ';
-      }
-      std::cout << std::endl;
-    }
-  }
 }
 
 //==================== public METHODS =======================
@@ -183,12 +170,42 @@ S21Matrix S21Matrix::Transpose() {
   return temp;
 }
 
-/**
- * @brief Calculates the algebraic addition matrix of the current one and
- * returns it.
- * @exception The matrix is not square.
- */
-// S21Matrix CalcComplements();
+S21Matrix S21Matrix::CalcComplements() {
+  if (this->rows_ != this->cols_) {
+    throw std::invalid_argument(
+        "Matrix must be square to calculate complements.");
+  }
+  S21Matrix result(this->rows_, this->cols_);
+
+  if (rows_ == 1 && cols_ == 1) {
+    result(0, 0) = 1;
+  } else {
+    for (int i = 0; i < this->rows_; i++) {
+      for (int j = 0; j < this->cols_; j++) {
+        S21Matrix minorMatrix = this->Minor(i, j);
+        result(i, j) = minorMatrix.Determinant() * pow(-1, i + j);
+      }
+    }
+  }
+
+  return result;
+}
+
+S21Matrix S21Matrix::Minor(int row, int col) const {
+  S21Matrix minorMatrix(this->rows_ - 1, this->cols_ - 1);
+
+  for (int i = 0, minor_i = 0; i < this->rows_; i++) {
+    if (i == row) continue;
+    for (int j = 0, minor_j = 0; j < this->cols_; j++) {
+      if (j == col) continue;
+      minorMatrix(minor_i, minor_j) = this->matrix_[i][j];
+      minor_j++;
+    }
+    minor_i++;
+  }
+
+  return minorMatrix;
+}
 
 double S21Matrix::Determinant() {
   if (this->rows_ != this->cols_) {
@@ -233,7 +250,29 @@ double S21Matrix::Determinant() {
  * @brief Calculates and returns the inverse matrix.й
  * @exception Matrix determinant is 0.
  */
-// S21Matrix S21Matrix::InverseMatrix();
+S21Matrix S21Matrix::InverseMatrix() {
+  if (rows_ != cols_) {
+    throw std::invalid_argument("Matrix must be square");
+  }
+
+  double det = this->Determinant();
+  if (det == 0) {
+    throw std::invalid_argument(
+        "Matrix determinant is 0, the matrix is not invertible");
+  }
+
+  S21Matrix complements = this->CalcComplements();
+  S21Matrix adjugate = complements.Transpose();
+  S21Matrix inverse(rows_, cols_);
+
+  for (int i = 0; i < rows_; i++) {
+    for (int j = 0; j < cols_; j++) {
+      inverse(i, j) = adjugate(i, j) / det;
+    }
+  }
+
+  return inverse;
+}
 
 // =================== OPERATORS overloads ====================
 

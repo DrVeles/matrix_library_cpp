@@ -345,7 +345,7 @@ TEST(test_methods, determinant_3) {
   EXPECT_EQ(matrix.Determinant(), 0);
 }
 
-TEST(test_methods, DeterminantOf3x3Matrix) {
+TEST(test_methods, determinant_4) {
   S21Matrix matrix(3, 3);
   matrix(0, 0) = 1;
   matrix(0, 1) = 2;
@@ -359,7 +359,7 @@ TEST(test_methods, DeterminantOf3x3Matrix) {
   EXPECT_NEAR(matrix.Determinant(), 22, 1e-9);
 }
 
-TEST(test_methods, determinant_4) {
+TEST(test_methods, determinant_5) {
   S21Matrix matrix(4, 4);
   matrix(0, 0) = 1;
   matrix(0, 1) = 0;
@@ -380,7 +380,7 @@ TEST(test_methods, determinant_4) {
   EXPECT_NEAR(matrix.Determinant(), 30, 1e-9);
 }
 
-TEST(test_methods, determinant_5_exc) {
+TEST(test_methods, determinant_6_exc) {
   S21Matrix matrix(2, 3);
   matrix(0, 0) = 1;
   matrix(0, 1) = 2;
@@ -389,6 +389,237 @@ TEST(test_methods, determinant_5_exc) {
   matrix(1, 1) = 5;
   matrix(1, 2) = 6;
   EXPECT_THROW(matrix.Determinant(), std::logic_error);
+}
+
+TEST(test_methods, cal_components_1) {
+  S21Matrix matrix(3, 3);
+
+  matrix(0, 0) = 1;
+  matrix(0, 1) = 2;
+  matrix(0, 2) = 3;
+  matrix(1, 0) = 0;
+  matrix(1, 1) = 4;
+  matrix(1, 2) = 5;
+  matrix(2, 0) = 1;
+  matrix(2, 1) = 0;
+  matrix(2, 2) = 6;
+
+  S21Matrix expected(3, 3);
+  expected(0, 0) = 24;
+  expected(0, 1) = 5;
+  expected(0, 2) = -4;
+  expected(1, 0) = -12;
+  expected(1, 1) = 3;
+  expected(1, 2) = 2;
+  expected(2, 0) = -2;
+  expected(2, 1) = -5;
+  expected(2, 2) = 4;
+
+  S21Matrix result = matrix.CalcComplements();
+  ASSERT_TRUE(result == expected);
+}
+
+TEST(test_methods, cal_components_2) {
+  S21Matrix matrix(2, 2);
+
+  matrix(0, 0) = 4;
+  matrix(0, 1) = 3;
+  matrix(1, 0) = 3;
+  matrix(1, 1) = 2;
+
+  S21Matrix expected(2, 2);
+  expected(0, 0) = 2;
+  expected(0, 1) = -3;
+  expected(1, 0) = -3;
+  expected(1, 1) = 4;
+
+  S21Matrix result = matrix.CalcComplements();
+  ASSERT_TRUE(result == expected);
+}
+
+TEST(test_methods, cal_components_3) {
+  S21Matrix matrix(1, 1);
+  matrix(0, 0) = 5;
+
+  S21Matrix expected(1, 1);
+  expected(0, 0) = 1;
+
+  S21Matrix result = matrix.CalcComplements();
+  ASSERT_TRUE(result == expected);
+}
+
+TEST(test_methods, cal_components_4) {
+  S21Matrix matrix(2, 3);
+  matrix(0, 0) = 1;
+  matrix(0, 1) = 2;
+  matrix(0, 2) = 3;
+  matrix(1, 0) = 4;
+  matrix(1, 1) = 5;
+  matrix(1, 2) = 6;
+
+  EXPECT_THROW(matrix.CalcComplements(), std::invalid_argument);
+}
+
+TEST(test_methods, minor_1) {
+  S21Matrix matrix(3, 3);
+  S21Matrix expected_minor(2, 2);
+
+  matrix(0, 0) = 1;
+  matrix(0, 1) = 2;
+  matrix(0, 2) = 3;
+  matrix(1, 0) = 4;
+  matrix(1, 1) = 5;
+  matrix(1, 2) = 6;
+  matrix(2, 0) = 7;
+  matrix(2, 1) = 8;
+  matrix(2, 2) = 9;
+
+  expected_minor(0, 0) = 4;
+  expected_minor(0, 1) = 6;
+  expected_minor(1, 0) = 7;
+  expected_minor(1, 1) = 9;
+
+  S21Matrix minor = matrix.Minor(0, 1);
+
+  ASSERT_TRUE(minor == expected_minor);
+}
+
+TEST(test_methods, minor_2) {
+  S21Matrix matrix(4, 4);
+  S21Matrix expected_minor(3, 3);
+
+  matrix(0, 0) = 1;
+  matrix(0, 1) = 2;
+  matrix(0, 2) = 3;
+  matrix(0, 3) = 4;
+  matrix(1, 0) = 5;
+  matrix(1, 1) = 6;
+  matrix(1, 2) = 7;
+  matrix(1, 3) = 8;
+  matrix(2, 0) = 9;
+  matrix(2, 1) = 10;
+  matrix(2, 2) = 11;
+  matrix(2, 3) = 12;
+  matrix(3, 0) = 13;
+  matrix(3, 1) = 14;
+  matrix(3, 2) = 15;
+  matrix(3, 3) = 16;
+
+  expected_minor(0, 0) = 1;
+  expected_minor(0, 1) = 2;
+  expected_minor(0, 2) = 4;
+  expected_minor(1, 0) = 9;
+  expected_minor(1, 1) = 10;
+  expected_minor(1, 2) = 12;
+  expected_minor(2, 0) = 13;
+  expected_minor(2, 1) = 14;
+  expected_minor(2, 2) = 16;
+
+  S21Matrix minor = matrix.Minor(1, 2);
+
+  ASSERT_TRUE(minor == expected_minor);
+}
+
+TEST(test_methods, minor_3) {
+  S21Matrix matrix(1, 1);
+
+  ASSERT_ANY_THROW(matrix.Minor(0, 0));
+}
+
+TEST(test_methods, minor_4) {
+  S21Matrix matrix(2, 2);
+  S21Matrix expected_minor(1, 1);
+
+  matrix(0, 0) = 1;
+  matrix(0, 1) = 2;
+  matrix(1, 0) = 3;
+  matrix(1, 1) = 4;
+
+  expected_minor(0, 0) = 4;
+
+  S21Matrix minor = matrix.Minor(0, 0);
+
+  ASSERT_TRUE(minor == expected_minor);
+}
+
+TEST(test_methods, inverse_1) {
+  S21Matrix matrix(3, 3);
+
+  matrix(0, 0) = 2;
+  matrix(0, 1) = -1;
+  matrix(0, 2) = 0;
+  matrix(1, 0) = -1;
+  matrix(1, 1) = 2;
+  matrix(1, 2) = -1;
+  matrix(2, 0) = 0;
+  matrix(2, 1) = -1;
+  matrix(2, 2) = 2;
+
+  S21Matrix expected(3, 3);
+  expected(0, 0) = 3.0 / 4;
+  expected(0, 1) = 1.0 / 2;
+  expected(0, 2) = 1.0 / 4;
+  expected(1, 0) = 1.0 / 2;
+  expected(1, 1) = 1;
+  expected(1, 2) = 1.0 / 2;
+  expected(2, 0) = 1.0 / 4;
+  expected(2, 1) = 1.0 / 2;
+  expected(2, 2) = 3.0 / 4;
+
+  S21Matrix result = matrix.InverseMatrix();
+  ASSERT_TRUE(result == expected);
+}
+
+TEST(test_methods, inverse_2) {
+  S21Matrix matrix(2, 2);
+
+  matrix(0, 0) = 4;
+  matrix(0, 1) = 7;
+  matrix(1, 0) = 2;
+  matrix(1, 1) = 6;
+
+  S21Matrix expected(2, 2);
+  expected(0, 0) = 0.6;
+  expected(0, 1) = -0.7;
+  expected(1, 0) = -0.2;
+  expected(1, 1) = 0.4;
+
+  S21Matrix result = matrix.InverseMatrix();
+  ASSERT_TRUE(result == expected);
+}
+
+TEST(test_methods, inverse_3) {
+  S21Matrix matrix(2, 2);
+
+  matrix(0, 0) = 1;
+  matrix(0, 1) = 2;
+  matrix(1, 0) = 2;
+  matrix(1, 1) = 4;
+
+  EXPECT_THROW(matrix.InverseMatrix(), std::invalid_argument);
+}
+
+TEST(test_methods, inverse_4) {
+  S21Matrix matrix(1, 1);
+  matrix(0, 0) = 5;
+
+  S21Matrix expected(1, 1);
+  expected(0, 0) = 0.2;
+
+  S21Matrix result = matrix.InverseMatrix();
+  ASSERT_TRUE(result == expected);
+}
+
+TEST(test_methods, inverse_5_exc) {
+  S21Matrix matrix(2, 3);
+  matrix(0, 0) = 1;
+  matrix(0, 1) = 2;
+  matrix(0, 2) = 3;
+  matrix(1, 0) = 4;
+  matrix(1, 1) = 5;
+  matrix(1, 2) = 6;
+
+  EXPECT_THROW(matrix.InverseMatrix(), std::invalid_argument);
 }
 
 // =================== OPERATORS overloads ====================
@@ -500,6 +731,20 @@ TEST(test_operators, sum_matrix_3) {
   ASSERT_EQ(b(0, 0), 1.0);
 }
 
+TEST(test_operators, sum_matrix_4) {
+  S21Matrix a(100, 100);
+  S21Matrix b(100, 100);
+  a(0, 0) = 1000.1;
+  b(0, 0) = 1;
+  S21Matrix c;
+
+  c = a + b;
+
+  ASSERT_EQ(c(0, 0), 1001.1);
+  ASSERT_EQ(a(0, 0), 1000.1);
+  ASSERT_EQ(b(0, 0), 1.0);
+}
+
 TEST(test_operators, sub_matrix_1) {
   S21Matrix a;
   S21Matrix b;
@@ -533,6 +778,20 @@ TEST(test_operators, sub_matrix_3) {
 
   ASSERT_EQ(c(0, 0), -10.0);
   ASSERT_EQ(a(0, 0), 1.0);
+  ASSERT_EQ(b(0, 0), 11.0);
+}
+
+TEST(test_operators, sub_matrix_4) {
+  S21Matrix a(2, 3);
+  S21Matrix b(2, 3);
+  a(0, 0) = 2;
+  b(0, 0) = 11;
+  S21Matrix c;
+
+  c = a - b;
+
+  ASSERT_EQ(c(0, 0), -9.0);
+  ASSERT_EQ(a(0, 0), 2.0);
   ASSERT_EQ(b(0, 0), 11.0);
 }
 

@@ -15,7 +15,7 @@ else ifeq ($(OS), Linux)
 	OPEN_CMD = open 
 endif
 
-all: rt
+all: s21_matrix_oop.a
 
 test: google_format s21_matrix_oop.a 
 	@$(CC) $(CC_FLAGS) s21_matrix_oop_tests.cpp s21_matrix_oop.cpp -o s21_matrix_oop_test $(CC_TEST_FLAGS)
@@ -27,7 +27,6 @@ debug: clean google_format s21_matrix_oop.a
 
 
 gcov_report: test
-	-@fbrew
 	@lcov -t "Tests" -o tests.info -c -d . --ignore-errors inconsistent >/dev/null 2>&1
 	@lcov -e tests.info '*.cpp' -o tests.info >/dev/null 2>&1
 	@genhtml -o report tests.info >/dev/null 2>&1
