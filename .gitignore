@@ -6,6 +6,7 @@ s21_matrix_oop_tests
 .DS_Store
 .idea
 .vscode
+
 *.gcda
 *.gcno
 report
@@ -15,6 +16,13 @@ Dockerfile
 
 # Prerequisites
 *.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
 
 # Object files
 *.o
@@ -31,6 +39,27 @@ Dockerfile
 *.gch
 *.pch
 
+<<<<<<< HEAD
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+=======
 # Libraries
 *.lib
 *.a

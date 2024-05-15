@@ -34,7 +34,7 @@ Below is a brief description of the operations on matrices that are implemented 
 
 | Operation | Description | Exceptional situations |
 | ----------- | ----------- | ----------- |
-| ` bool EqMatrix(const S21Matrix& other)` | Checks the matrices for equality among themselves. |  |
+| `bool EqMatrix(const S21Matrix& other)` | Checks the matrices for equality among themselves. |  |
 | `void SumMatrix(const S21Matrix& other)` | Adds a second matrix to the current one | different matrix dimensions. |
 | `void SubMatrix(const S21Matrix& other)` | Subtracts from the current matrix another | different dimension of the matrices. |
 | `void MulNumber(const double num)` | Multiplies the current matrix by a number. |  |
@@ -49,12 +49,12 @@ Below is a brief description of the operations on matrices that are implemented 
 
 | Operator | Description | Exceptional situations |
 | ----------- | ----------- | ----------- |
-| `+` | The addition of two matrices.  | Different dimensions of the matrices. |
-| `-` | Subtraction of one matrix from another. | Different matrix dimensions. |
-| `*` | Matrix multiplication and matrix multiplication by a number. | The number of columns of the first matrix is not equal to the number of rows of the second matrix. |
-| `==` | Checking for equality of matrices (`EqMatrix'). | |
-| `=` | Assigning values of another matrix to a matrix. | |
-| `+=` | Assignment of addition (`SumMatrix').   | Different dimension of the matrices. |
-| `-=` | Assignment of the difference (`SubMatrix'). | Different dimension of matrices. |
-| `*=` | Assignment of multiplication (`MulMatrix`/`MulNumber'). | The number of columns of the first matrix is not equal to the number of rows of the second matrix. |
-| `(int i, int j)` | Indexing by matrix elements (row, column). | Index outside the matrix. |
+| `+`      | Addition of two matrices. | Different matrix dimensions. |
+| `-`   | Subtraction of one matrix from another. | Different matrix dimensions. |
+| `*`  | Matrix multiplication and matrix multiplication by a number. | The number of columns of the first matrix does not equal the number of rows of the second matrix. |
+| `==`  | Checks for matrices equality (`EqMatrix`). | |
+| `=`  | Assignment of values from one matrix to another one. | |
+| `+=`  | Addition assignment (`SumMatrix`) | different matrix dimensions. |
+| `-=`  | Difference assignment (`SubMatrix`) | different matrix dimensions. |
+| `*=`  | Multiplication assignment (`MulMatrix`/`MulNumber`). | The number of columns of the first matrix does not equal the number of rows of the second matrix. |
+| `(int i, int j)`  | Indexation by matrix elements (row, column). | Index is outside the matrix. |
