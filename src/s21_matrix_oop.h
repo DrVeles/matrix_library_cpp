@@ -1,6 +1,8 @@
 #ifndef _S21_MATRIX_OOP_H_
 #define _S21_MATRIX_OOP_H_
 
+#include <math.h>
+
 #include <iostream>
 
 class S21Matrix {

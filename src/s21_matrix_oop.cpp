@@ -173,9 +173,6 @@ void S21Matrix::MulMatrix(const S21Matrix& other) {
   *this = result;
 }
 
-/**
- * @brief Creates a new transposed matrix from the current one and returns it.
- */
 S21Matrix S21Matrix::Transpose() {
   S21Matrix temp(this->cols_, this->rows_);
   for (int i = 0; i < this->rows_; i++) {
@@ -191,19 +188,52 @@ S21Matrix S21Matrix::Transpose() {
  * returns it.
  * @exception The matrix is not square.
  */
-S21Matrix CalcComplements();
+// S21Matrix CalcComplements();
+
+double S21Matrix::Determinant() {
+  if (this->rows_ != this->cols_) {
+    throw std::logic_error("The matrix is not square in Determinant.");
+  }
+
+  S21Matrix temp(*this);
+  double det = 1.0;
+
+  for (int i = 0; i < this->rows_; ++i) {
+    if (std::fabs(temp(i, i)) < 1e-7) {
+      bool pivot_found = false;
+      for (int j = i + 1; j < this->rows_; ++j) {
+        if (std::fabs(temp(j, i)) > 1e-7) {
+          std::swap(temp.matrix_[i], temp.matrix_[j]);
+          det *= -1;
+          pivot_found = true;
+          break;
+        }
+      }
+      if (!pivot_found) {
+        return 0.0;
+      }
+    }
+
+    for (int j = i + 1; j < this->rows_; ++j) {
+      double factor = temp(j, i) / temp(i, i);
+      for (int k = i; k < this->cols_; ++k) {
+        temp(j, k) -= factor * temp(i, k);
+      }
+    }
+  }
+
+  for (int i = 0; i < this->rows_; ++i) {
+    det *= temp(i, i);
+  }
+
+  return det;
+}
 
 /**
- * @brief Calculates and returns the determinant of the current matrix.
- * @exception The matrix is not square.
- */
-double Determinant();
-
-/**
- * @brief Calculates and returns the inverse matrix.
+ * @brief Calculates and returns the inverse matrix.й
  * @exception Matrix determinant is 0.
  */
-S21Matrix InverseMatrix();
+// S21Matrix S21Matrix::InverseMatrix();
 
 // =================== OPERATORS overloads ====================
 

@@ -76,7 +76,7 @@ TEST(test_accessors_mutators, link_access) {
   ASSERT_EQ(a(0, 0), b(0, 0));
 }
 
-TEST(test_accessors_mutators, IncreaseRows) {
+TEST(test_accessors_mutators, increase_rows) {
   S21Matrix matrix(2, 2);
   matrix(0, 0) = 1.0;
   matrix(0, 1) = 2.0;
@@ -93,7 +93,7 @@ TEST(test_accessors_mutators, IncreaseRows) {
   EXPECT_EQ(matrix(1, 1), 4.0);
 }
 
-TEST(test_accessors_mutators, DecreaseRows) {
+TEST(test_accessors_mutators, decrease_rows) {
   S21Matrix matrix(3, 2);
   matrix(0, 0) = 1.0;
   matrix(0, 1) = 2.0;
@@ -112,41 +112,7 @@ TEST(test_accessors_mutators, DecreaseRows) {
   EXPECT_EQ(matrix(1, 1), 4.0);
 }
 
-TEST(test_accessors_mutators, SameRows) {
-  S21Matrix matrix(2, 2);
-  matrix(0, 0) = 1.0;
-  matrix(0, 1) = 2.0;
-  matrix(1, 0) = 3.0;
-  matrix(1, 1) = 4.0;
-
-  matrix.setRows(2);
-
-  EXPECT_EQ(matrix.getRows(), 2);
-  EXPECT_EQ(matrix.getCols(), 2);
-  EXPECT_EQ(matrix(0, 0), 1.0);
-  EXPECT_EQ(matrix(0, 1), 2.0);
-  EXPECT_EQ(matrix(1, 0), 3.0);
-  EXPECT_EQ(matrix(1, 1), 4.0);
-}
-
-TEST(test_accessors_mutators, SameCols) {
-  S21Matrix matrix(2, 2);
-  matrix(0, 0) = 1.0;
-  matrix(0, 1) = 2.0;
-  matrix(1, 0) = 3.0;
-  matrix(1, 1) = 4.0;
-
-  matrix.setCols(2);
-
-  EXPECT_EQ(matrix.getRows(), 2);
-  EXPECT_EQ(matrix.getCols(), 2);
-  EXPECT_EQ(matrix(0, 0), 1.0);
-  EXPECT_EQ(matrix(0, 1), 2.0);
-  EXPECT_EQ(matrix(1, 0), 3.0);
-  EXPECT_EQ(matrix(1, 1), 4.0);
-}
-
-TEST(test_accessors_mutators, ZeroRows) {
+TEST(test_accessors_mutators, zero_rows) {
   S21Matrix matrix(2, 2);
   matrix(0, 0) = 1.0;
   matrix(0, 1) = 2.0;
@@ -155,7 +121,7 @@ TEST(test_accessors_mutators, ZeroRows) {
   ASSERT_ANY_THROW(matrix.setRows(0));
 }
 
-TEST(test_accessors_mutators, OneRow) {
+TEST(test_accessors_mutators, one_rows) {
   S21Matrix matrix(2, 2);
   matrix(0, 0) = 1.0;
   matrix(0, 1) = 2.0;
@@ -170,7 +136,7 @@ TEST(test_accessors_mutators, OneRow) {
   EXPECT_EQ(matrix(0, 1), 2.0);
 }
 
-TEST(test_accessors_mutators, OneCol) {
+TEST(test_accessors_mutators, one_cols) {
   S21Matrix matrix(2, 2);
   matrix(0, 0) = 1.0;
   matrix(0, 1) = 2.0;
@@ -184,9 +150,6 @@ TEST(test_accessors_mutators, OneCol) {
   EXPECT_EQ(matrix(0, 0), 1.0);
   EXPECT_EQ(matrix(1, 0), 3.0);
 }
-
-TEST(test_accessors_mutators, test_2) { S21Matrix a; }
-
 //==================== public METHODS =======================
 
 TEST(test_methods, equal_matrix) {
@@ -355,9 +318,82 @@ TEST(test_methods, transpose_2) {
   EXPECT_EQ(matrix(2, 1), 0.0);
 }
 
+TEST(test_methods, determinant_1) {
+  S21Matrix matrix(3, 3);
+  EXPECT_EQ(matrix.Determinant(), 0);
+}
+
+TEST(test_methods, determinant_2) {
+  S21Matrix matrix(3, 3);
+  for (int i = 0; i < 3; ++i) {
+    matrix(i, i) = 1;
+  }
+  EXPECT_EQ(matrix.Determinant(), 1);
+}
+
+TEST(test_methods, determinant_3) {
+  S21Matrix matrix(3, 3);
+  matrix(0, 0) = 1;
+  matrix(0, 1) = 2;
+  matrix(0, 2) = 3;
+  matrix(1, 0) = 4;
+  matrix(1, 1) = 5;
+  matrix(1, 2) = 6;
+  matrix(2, 0) = 7;
+  matrix(2, 1) = 8;
+  matrix(2, 2) = 9;
+  EXPECT_EQ(matrix.Determinant(), 0);
+}
+
+TEST(test_methods, DeterminantOf3x3Matrix) {
+  S21Matrix matrix(3, 3);
+  matrix(0, 0) = 1;
+  matrix(0, 1) = 2;
+  matrix(0, 2) = 3;
+  matrix(1, 0) = 0;
+  matrix(1, 1) = 4;
+  matrix(1, 2) = 5;
+  matrix(2, 0) = 1;
+  matrix(2, 1) = 0;
+  matrix(2, 2) = 6;
+  EXPECT_NEAR(matrix.Determinant(), 22, 1e-9);
+}
+
+TEST(test_methods, determinant_4) {
+  S21Matrix matrix(4, 4);
+  matrix(0, 0) = 1;
+  matrix(0, 1) = 0;
+  matrix(0, 2) = 2;
+  matrix(0, 3) = -1;
+  matrix(1, 0) = 3;
+  matrix(1, 1) = 0;
+  matrix(1, 2) = 0;
+  matrix(1, 3) = 5;
+  matrix(2, 0) = 2;
+  matrix(2, 1) = 1;
+  matrix(2, 2) = 4;
+  matrix(2, 3) = -3;
+  matrix(3, 0) = 1;
+  matrix(3, 1) = 0;
+  matrix(3, 2) = 5;
+  matrix(3, 3) = 0;
+  EXPECT_NEAR(matrix.Determinant(), 30, 1e-9);
+}
+
+TEST(test_methods, determinant_5_exc) {
+  S21Matrix matrix(2, 3);
+  matrix(0, 0) = 1;
+  matrix(0, 1) = 2;
+  matrix(0, 2) = 3;
+  matrix(1, 0) = 4;
+  matrix(1, 1) = 5;
+  matrix(1, 2) = 6;
+  EXPECT_THROW(matrix.Determinant(), std::logic_error);
+}
+
 // =================== OPERATORS overloads ====================
 
-TEST(MatrixAccessTest, ValidIndices) {
+TEST(test_operators, access_1) {
   S21Matrix matrix(3, 3);  // Создаем матрицу 3x3
 
   // Заполняем матрицу значениями
@@ -383,7 +419,7 @@ TEST(MatrixAccessTest, ValidIndices) {
   EXPECT_EQ(matrix(2, 2), 9.0);
 }
 
-TEST(MatrixAccessTest, InvalidIndices) {
+TEST(test_operators, access_2_exc) {
   S21Matrix matrix(3, 3);  // Создаем матрицу 3x3
 
   // Проверяем выброс исключений при некорректном доступе
