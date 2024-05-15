@@ -1,6 +1,8 @@
 #ifndef _S21_MATRIX_OOP_H_
 #define _S21_MATRIX_OOP_H_
 
+#include <math.h>
+
 #include <iostream>
 
 class S21Matrix {
@@ -9,6 +11,9 @@ class S21Matrix {
 
   int rows_, cols_;
   double** matrix_;
+
+  void createMatrix(int rows, int cols);
+  void deleteMatrix() noexcept;
 
  public:
   //========================= BAZE ============================
@@ -22,7 +27,7 @@ class S21Matrix {
   // copy constructor
   S21Matrix(const S21Matrix& other);
   // move constructor
-  S21Matrix(S21Matrix&& other);
+  S21Matrix(S21Matrix&& other) noexcept;
   // destructor
   ~S21Matrix();
 
@@ -46,7 +51,7 @@ class S21Matrix {
    * @brief Check is equal matrix
    * @return `true` if equal, else `false`
    */
-  bool EqMatrix(const S21Matrix& other);
+  bool EqMatrix(const S21Matrix& other) noexcept;
 
   /**
    * @brief Adds the second matrix to the current one
@@ -61,7 +66,7 @@ class S21Matrix {
   void SubMatrix(const S21Matrix& other);
 
   // Multiplies the current matrix by a number.
-  void MulNumber(const double num);
+  void MulNumber(const double num) noexcept;
 
   /**
    * @brief Multiplies the current matrix by the second matrix.
@@ -74,6 +79,11 @@ class S21Matrix {
    * @brief Creates a new transposed matrix from the current one and returns it.
    */
   S21Matrix Transpose();
+
+  /**
+   * @brief Calculation minor to matrix.
+   */
+  S21Matrix Minor(int row, int col) const;
 
   /**
    * @brief Calculates the algebraic addition matrix of the current one and
@@ -96,72 +106,71 @@ class S21Matrix {
 
   // =================== OPERATORS overloads ====================
 
-
-
   /**
-   * @brief `+`	Addition of two matrices.	
+   * @brief `+`	Addition of two matrices.
    * @exception Different matrix dimensions.
-   */ 
+   */
   S21Matrix operator+(const S21Matrix& other);
 
   /**
    * @brief `-` Subtraction of one matrix from another.
    * @exception Different matrix dimensions.
-   */ 
+   */
   S21Matrix operator-(const S21Matrix& other);
 
   /**
-   * @brief `*`	Matrix multiplication and matrix multiplication by a number.	
-   * @exception The number of columns of the first matrix does not equal the number of rows of the second matrix.
-   */ 
+   * @brief `*`	Matrix multiplication.
+   * @exception The number of columns of the first matrix does not equal the
+   * number of rows of the second matrix.
+   */
   S21Matrix operator*(const S21Matrix& other);
 
   /**
+   * @brief `*`	Matrix multiplication by a number.
+   */
+  S21Matrix operator*(const double& num);
+
+  /**
    * @brief `==` Checks for matrices equality (EqMatrix).
-   */ 
-  S21Matrix operator==(const S21Matrix& other);
+   */
+  bool operator==(const S21Matrix& other);
 
   /**
    * @brief `=` S21Matrix& operator=(const S21Matrix& other);
-   */ 
+   */
   S21Matrix& operator=(const S21Matrix& other);
 
   /**
    * @brief `+=`	Addition assignment (SumMatrix)
    * @exception 	Different matrix dimensions.
-   */ 
-  S21Matrix& operator+=(const S21Matrix& other);     
+   */
+  S21Matrix& operator+=(const S21Matrix& other);
 
   /**
    * @brief `-=`	Addition assignment (SubMatrix)
    * @exception 	Different matrix dimensions.
-   */ 
-  S21Matrix& operator-=(const S21Matrix& other);     
+   */
+  S21Matrix& operator-=(const S21Matrix& other);
 
   /**
-   * @brief `*=`	Multiplication assignment (MulMatrix/MulNumber).
-   * @exception 	The number of columns of the first matrix does not equal the number of rows of the second matrix.
-   */ 
-  S21Matrix& operator*=(const S21Matrix& other);   
+   * @brief `*=`	Multiplication assignment MulMatrix.
+   * @exception 	The number of columns of the first matrix does not equal
+   * the number of rows of the second matrix.
+   */
+  S21Matrix& operator*=(const S21Matrix& other);
+
+  /**
+   * @brief `*=`	Multiplication assignment MulNumber.
+   */
+  S21Matrix& operator*=(const double& num);
 
   /**
    * @brief Indexation by matrix elements (row, column).
    * @param `i` row, `j` col
    * @return a link to an element with the index `[i][j]`
    * @exception Index is outside the matrix.
-   */ 
-  double& operator()(int i, int j); 
-
-  //====================== My methods ===========================
-
-  /**
-   * @brief
-   * @param
-   * @return
-   * @exception
-   */ 
-  void printS21Matrix(const S21Matrix& other);
-
+   */
+  double& operator()(int i, int j);
 };
 
 #endif

@@ -1,8 +1,18 @@
 # My 
 s21_matrix_oop
+s21_matrix_oop_test
+s21_matrix_oop_debug
+s21_matrix_oop_tests
 .DS_Store
 .idea
 .vscode
+
+*.gcda
+*.gcno
+report
+*.info
+Dockerfile
+*.sh
 
 # Prerequisites
 *.d
@@ -13,9 +23,6 @@ s21_matrix_oop
 *.o
 *.obj
 
-
-# Prerequisites
-*.d
 
 # Object files
 *.o
