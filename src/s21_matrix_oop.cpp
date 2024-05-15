@@ -143,7 +143,6 @@ void S21Matrix::SubMatrix(const S21Matrix& other) {
   }
 }
 
-// Multiplies the current matrix by a number.
 void S21Matrix::MulNumber(const double num) noexcept {
   for (int i = 0; i < this->rows_; i++) {
     for (int j = 0; j < this->cols_; j++) {
@@ -152,11 +151,6 @@ void S21Matrix::MulNumber(const double num) noexcept {
   }
 }
 
-/**
- * @brief Multiplies the current matrix by the second matrix.
- * @exception The number of columns of the first matrix is not equal to the
- * number of rows of the second matrix.
- */
 void S21Matrix::MulMatrix(const S21Matrix& other) {
   if (this->cols_ != other.rows_) {
     throw std::invalid_argument(
@@ -182,7 +176,15 @@ void S21Matrix::MulMatrix(const S21Matrix& other) {
 /**
  * @brief Creates a new transposed matrix from the current one and returns it.
  */
-S21Matrix Transpose();
+S21Matrix S21Matrix::Transpose() {
+  S21Matrix temp(this->cols_, this->rows_);
+  for (int i = 0; i < this->rows_; i++) {
+    for (int j = 0; j < this->cols_; j++) {
+      temp.matrix_[j][i] = this->matrix_[i][j];
+    }
+  }
+  return temp;
+}
 
 /**
  * @brief Calculates the algebraic addition matrix of the current one and

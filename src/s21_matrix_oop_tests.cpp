@@ -318,6 +318,43 @@ TEST(test_methods, mult_matrix_matrix_exc) {
   ASSERT_ANY_THROW(a.MulMatrix(b));
 }
 
+TEST(test_methods, transpose_1) {
+  S21Matrix matrix(2, 2);
+  matrix(0, 0) = 1.0;
+  matrix(0, 1) = 2.0;
+  matrix(1, 0) = 3.0;
+  matrix(1, 1) = 4.0;
+
+  matrix = matrix.Transpose();
+
+  EXPECT_EQ(matrix.getCols(), 2);
+  EXPECT_EQ(matrix.getRows(), 2);
+  EXPECT_EQ(matrix(0, 0), 1.0);
+  EXPECT_EQ(matrix(0, 1), 3.0);
+  EXPECT_EQ(matrix(1, 0), 2.0);
+  EXPECT_EQ(matrix(1, 1), 4.0);
+}
+
+TEST(test_methods, transpose_2) {
+  S21Matrix matrix(2, 2);
+  matrix(0, 0) = 1.0;
+  matrix(0, 1) = 2.0;
+  matrix(1, 0) = 3.0;
+  matrix(1, 1) = 4.0;
+  matrix.setCols(3);
+
+  matrix = matrix.Transpose();
+
+  EXPECT_EQ(matrix.getCols(), 2);
+  EXPECT_EQ(matrix.getRows(), 3);
+  EXPECT_EQ(matrix(0, 0), 1.0);
+  EXPECT_EQ(matrix(0, 1), 3.0);
+  EXPECT_EQ(matrix(1, 0), 2.0);
+  EXPECT_EQ(matrix(1, 1), 4.0);
+  EXPECT_EQ(matrix(2, 0), 0.0);
+  EXPECT_EQ(matrix(2, 1), 0.0);
+}
+
 // =================== OPERATORS overloads ====================
 
 TEST(MatrixAccessTest, ValidIndices) {

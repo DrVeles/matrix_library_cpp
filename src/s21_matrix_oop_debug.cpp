@@ -2,18 +2,21 @@
 
 int main() {
   S21Matrix a(2);
-  a.setRows(1);
   a(0, 0) = 1;
   a(0, 1) = 2;
+  a(1, 0) = 3;
+  a(1, 1) = 4;
+  a.setCols(3);
 
-  S21Matrix b(2);
-  b.setCols(1);
-  b(0, 0) = 3;
-  b(1, 0) = 4;
+  a.printS21Matrix();
 
-  a.MulMatrix(b);
+  a = a.Transpose();
 
-  std::cout << a(0, 0) << std::endl;
+  a.Transpose();
+
+  std::cout << std::endl;
+  a.printS21Matrix();
+  std::cout << std::endl;
 
   return 0;
 }
