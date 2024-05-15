@@ -34,7 +34,7 @@ Below is a brief description of the operations on matrices that are implemented 
 
 | Operation | Description | Exceptional situations |
 | ----------- | ----------- | ----------- |
-| ` bool EqMatrix(const S21Matrix& other)` | Checks the matrices for equality among themselves. |  |
+| `bool EqMatrix(const S21Matrix& other)` | Checks the matrices for equality among themselves. |  |
 | `void SumMatrix(const S21Matrix& other)` | Adds a second matrix to the current one | different matrix dimensions. |
 | `void SubMatrix(const S21Matrix& other)` | Subtracts from the current matrix another | different dimension of the matrices. |
 | `void MulNumber(const double num)` | Multiplies the current matrix by a number. |  |
