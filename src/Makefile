@@ -1,4 +1,4 @@
-CC := gcc 
+CC = gcc 
 CC_FLAGS := -Wall -Wextra -Werror -lstdc++ -std=c++17
 CC_TEST_FLAGS =
 LEAKS = 
@@ -11,7 +11,7 @@ ifeq ($(OS), Darwin)
 	OPEN_CMD = xdg-open 
 else ifeq ($(OS), Linux)
 	CC_TEST_FLAGS = -lgtest -lrt -lpthread -lm -lsubunit
-	LEAKS = CK_FORK=no valgrind --vgdb=no --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --read-var-info=yes  ./unit_test
+	LEAKS = CK_FORK=no valgrind --vgdb=no --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --read-var-info=yes  ./s21_matrix_oop_test
 	OPEN_CMD = open 
 endif
 
@@ -24,7 +24,6 @@ test: google_format s21_matrix_oop.a
 debug: clean google_format s21_matrix_oop.a
 	@$(CC) $(CC_FLAGS) -g s21_matrix_oop_debug.cpp s21_matrix_oop.cpp -o s21_matrix_oop_debug
 	./s21_matrix_oop_debug
-
 
 gcov_report: test
 	@lcov -t "Tests" -o tests.info -c -d . --ignore-errors inconsistent >/dev/null 2>&1
