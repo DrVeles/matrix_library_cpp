@@ -1,29 +1,12 @@
 CC = gcc 
 CC_FLAGS := -Wall -Wextra -Werror -lstdc++ -std=c++17
-CC_TEST_FLAGS =
-LEAKS = 
-OPEN_CMD = 
-
-OS = $(shell uname)
-ifeq ($(OS), Darwin)
-	CC_TEST_FLAGS = -lgtest --coverage 
-	LEAKS = CK_FORK=no leaks -atExit -q -- 
-	OPEN_CMD = xdg-open 
-else ifeq ($(OS), Linux)
-	CC_TEST_FLAGS = -lgtest -lrt -lpthread -lm -lsubunit
-	LEAKS = CK_FORK=no valgrind --vgdb=no --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --read-var-info=yes  ./s21_matrix_oop_test
-	OPEN_CMD = open 
-endif
+CC_TEST_FLAGS = -lgtest --coverage 
 
 all: s21_matrix_oop.a
 
 test: google_format s21_matrix_oop.a 
 	@$(CC) $(CC_FLAGS) s21_matrix_oop_tests.cpp s21_matrix_oop.cpp -o s21_matrix_oop_test $(CC_TEST_FLAGS)
 	./s21_matrix_oop_test
-
-debug: clean google_format s21_matrix_oop.a
-	@$(CC) $(CC_FLAGS) -g s21_matrix_oop_debug.cpp s21_matrix_oop.cpp -o s21_matrix_oop_debug
-	./s21_matrix_oop_debug
 
 gcov_report: test
 	@lcov -t "Tests" -o tests.info -c -d . --ignore-errors inconsistent >/dev/null 2>&1
@@ -40,7 +23,7 @@ clean:
 rt: clean test
 
 leaks: test
-	$(LEAKS) ./s21_matrix_oop_test 
+	CK_FORK=no leaks -atExit -q --  ./s21_matrix_oop_test 
 
 google_format:
 	-@clang-format -style=Google -i *.h *.cpp

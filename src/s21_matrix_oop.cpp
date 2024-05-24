@@ -95,7 +95,7 @@ bool S21Matrix::EqMatrix(const S21Matrix& other) noexcept {
   if (this->rows_ == other.rows_ and this->cols_ == other.cols_) {
     for (int i = 0; i < other.rows_; i++) {
       for (int j = 0; j < other.cols_; j++) {
-        if (this->matrix_[i][j] != other.matrix_[i][j]) {
+        if (fabs(this->matrix_[i][j] - other.matrix_[i][j]) > 1e-7) {
           return false;
         }
       }
